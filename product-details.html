@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цветнечёк у Олечки | Детали товара</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Стили для детальной страницы товара */
+        
+        .product-detail-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .product-breadcrumbs {
+            margin-bottom: 30px;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        
+        .product-breadcrumbs a {
+            color: var(--primary-red);
+            text-decoration: none;
+        }
+        
+        .product-breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Основная часть с фото и информацией */
+        .product-main {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        @media (max-width: 992px) {
+            .product-main {
+                flex-direction: column;
+            }
+        }
+        
+        /* Галерея фотографий */
+        .product-gallery {
+            flex: 1;
+            max-width: 500px;
+        }
+        
+        .main-image-container {
+            width: 100%;
+            height: 400px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 15px;
+            z-index: 2;
+        }
+        
+        .gallery-nav-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--dark-red);
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gallery-nav-btn:hover {
+            background-color: var(--white);
+            transform: scale(1.1);
+        }
+        
+        .image-counter {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: var(--white);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 2;
+        }
+        
+        .thumbnails-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+        
+        .thumbnail.active {
+            border-color: var(--primary-red);
+        }
+        
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .thumbnail:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Информация о товаре */
+        .product-info {
+            flex: 1;
+        }
+        
+        .product-header {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--pale-red);
+        }
+        
+        .product-title {
+            font-size: 2rem;
+            color: var(--dark-red);
+            margin-bottom: 10px;
+        }
+        
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stars {
+            color: #FFD700;
+        }
+        
+        .rating-count {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        
+        .product-article {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        
+        .product-price-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--pale-red);
+            border-radius: var(--border-radius);
+        }
+        
+        .current-price {
+            font-size: 2.5rem;
+            color: var(--primary-red);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .old-price {
+            text-decoration: line-through;
+            color: var(--text-gray);
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .discount-percent {
+            background-color: var(--primary-red);
+            color: var(--white);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-buy {
+            padding: 15px 30px;
+            background-color: var(--primary-red);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .btn-buy:hover {
+            background-color: var(--dark-red);
+        }
+        
+        .btn-favorite {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-red);
+            background-color: transparent;
+            color: var(--primary-red);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-favorite:hover,
+        .btn-favorite.active {
+            background-color: var(--primary-red);
+            color: var(--white);
+        }
+        
+        /* Характеристики товара */
+        .product-specs {
+            margin-bottom: 40px;
+        }
+        
+        .specs-title {
+            font-size: 1.3rem;
+            color: var(--dark-red);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--pale-red);
+        }
+        
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .specs-table tr {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .specs-table td {
+            padding: 12px 0;
+            vertical-align: top;
+        }
+        
+        .specs-table td:first-child {
+            color: var(--text-gray);
+            width: 40%;
+            font-weight: 500;
+        }
+        
+        .specs-table td:last-child {
+            color: var(--dark-gray);
+            width: 60%;
+        }
+        
+        /* Описание товара */
+        .product-description-section {
+            margin-bottom: 50px;
+        }
+        
+        .description-title {
+            font-size: 1.3rem;
+            color: var(--dark-red);
+            margin-bottom: 20px;
+        }
+        
+        .description-content {
+            line-height: 1.6;
+            color: var(--dark-gray);
+        }
+        
+        /* Похожие товары */
+        .similar-products {
+            margin-bottom: 60px;
+        }
+        
+        .similar-title {
+            font-size: 1.5rem;
+            color: var(--dark-red);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .similar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        /* Инструкция по замене фото */
+        .photo-instruction {
+            background-color: #fff8e1;
+            border: 1px solid #ffecb3;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-top: 30px;
+            color: #5d4037;
+        }
+        
+        .photo-instruction h4 {
+            color: #3e2723;
+            margin-bottom: 15px;
+        }
+        
+        .photo-path {
+            background-color: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+            border-left: 3px solid var(--primary-red);
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .product-title {
+                font-size: 1.5rem;
+            }
+            
+            .current-price {
+                font-size: 2rem;
+            }
+            
+            .btn-buy {
+                min-width: 100%;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+            
+            .gallery-nav-btn {
+                width: 35px;
+                height: 35px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-image-container {
+                height: 300px;
+            }
+            
+            .thumbnail {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .specs-table td:first-child,
+            .specs-table td:last-child {
+                width: 100%;
+                display: block;
+            }
+            
+            .specs-table td:first-child {
+                padding-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Проверка авторизации -->
+    <script>
+        if (!localStorage.getItem('currentUser')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+    
+    <!-- Шапка сайта -->
+<header class="header">
+    <div class="header-container">
+        <div class="header-main">
+            <div class="logo-section">
+                <div class="logo-icon-wrapper">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <div class="logo-text">
+                    <h1 class="logo-title">Цветничок у Оли</h1>
+                    <p class="logo-subtitle">Красивые цветы для вашего настроения</p>
+                </div>
+            </div>
+            
+            <div class="header-contacts">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <div class="contact-info">
+                        <span class="contact-number">+375 25 530-99-49</span>
+                        <span class="contact-number">+375 33 623-94-33</span>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="contact-address">г.п. Вороново, ул. Аэродромная, д. 25</span>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <div class="user-section">
+                    <span id="user-greeting"></span>
+                    <a href="#" id="logout" class="logout-btn">Выйти</a>
+                </div>
+                <a href="cart.html" class="cart-button" id="open-cart">
+                    <i class="fas fa-shopping-basket"></i>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+        
+        <nav class="main-nav">
+            <a href="home.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </a>
+            <a href="catalog.html" class="nav-link active">
+                <i class="fas fa-th-large"></i>
+                <span>Каталог</span>
+            </a>
+            <a href="contacts.html" class="nav-link">
+                <i class="fas fa-address-book"></i>
+                <span>Контакты</span>
+            </a>
+            <a href="account.html" class="nav-link">
+                <i class="fas fa-user"></i>
+                <span>Мой аккаунт</span>
+            </a>
+        </nav>
+    </div>
+</header>
+    
+    <!-- Детальная страница товара -->
+    <div class="product-detail-container">
+        <!-- Хлебные крошки -->
+        <div class="product-breadcrumbs">
+            <a href="catalog.html">Каталог</a> / 
+            <a href="#" id="category-breadcrumb">Розы</a> / 
+            <span id="product-breadcrumb">Название товара</span>
+        </div>
+        
+        <!-- Основная информация о товаре -->
+        <div class="product-main">
+            <!-- Галерея фотографий -->
+            <div class="product-gallery">
+                <div class="main-image-container">
+                    <img src="" alt="" class="main-image" id="main-image">
+                    <div class="gallery-nav">
+                        <button class="gallery-nav-btn" id="prev-image"><i class="fas fa-chevron-left"></i></button>
+                        <button class="gallery-nav-btn" id="next-image"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="image-counter" id="image-counter">1 / 3</div>
+                </div>
+                
+                <div class="thumbnails-container" id="thumbnails-container">
+                    <!-- Миниатюры будут добавлены через JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Информация о товаре -->
+            <div class="product-info">
+                <div class="product-header">
+                    <h1 class="product-title" id="product-title">Название товара</h1>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="rating-count">4.7 (124 отзыва)</span>
+                    </div>
+                    <div class="product-article">Артикул: <span id="product-article">000001</span></div>
+                </div>
+                
+                <div class="product-price-section">
+                    <div class="current-price">
+                        <span id="current-price">0</span> руб.
+                    </div>
+                    <div>
+                        <span class="old-price" id="old-price"></span>
+                        <span class="discount-percent" id="discount-percent"></span>
+                    </div>
+                </div>
+                
+                <!-- Кнопки действий -->
+                <div class="product-actions">
+                    <button class="btn-buy" id="add-to-cart-detail">Добавить в корзину</button>
+                    <button class="btn-favorite" id="add-to-favorite"><i class="far fa-heart"></i></button>
+                </div>
+                
+                <!-- Характеристики товара -->
+                <div class="product-specs">
+                    <h3 class="specs-title">Характеристики</h3>
+                    <table class="specs-table" id="specs-table">
+                        <!-- Характеристики будут добавлены через JavaScript -->
+                    </table>
+                </div>
+                
+                <!-- Описание товара -->
+                <div class="product-description-section">
+                    <h3 class="description-title">Описание</h3>
+                    <div class="description-content" id="description-content">
+                        Описание товара...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Похожие товары -->
+        <div class="similar-products">
+            <h3 class="similar-title">Похожие товары</h3>
+            <div class="similar-grid" id="similar-products">
+                <!-- Похожие товары будут добавлены через JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Цветнечёк у Олечки</h3>
+                <p>Магазин цветов с душой. Мы создаем красивые букеты, которые дарят радость и выражают ваши чувства.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-vk"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Магазин</h3>
+                <ul class="footer-links">
+                    <li><a href="catalog.html">Каталог букетов</a></li>
+                    <li><a href="home.html">Акции и скидки</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Помощь</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Доставка и оплата</a></li>
+                    <li><a href="#">Уход за цветами</a></li>
+                    <li><a href="#">Частые вопросы</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Контакты</h3>
+                <p><i class="fas fa-map-marker-alt"></i> г.п. Вороново, ул. Аэродромная, д. 25</p>
+                <p><i class="fas fa-phone"></i> +375 25 530-99-49 / +375 (33) 623-94-33</p>
+                <p><i class="fas fa-envelope"></i> ilyabalt345ilya1@gmail.com / olgabalts@gmail.com</p>
+                <p><i class="fas fa-clock"></i> Ежедневно с 10:00 до 20:00</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 Магазин цветов "Цветнечёк у Олечки". Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Получаем ID товара из URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = parseInt(urlParams.get('id')) || 1;
+        
+        // ВАЖНО: ОБЯЗАТЕЛЬНО ДОБАВЬТЕ ВЕСЬ МАССИВ ТОВАРОВ СЮДА!
+        // Скопируйте весь массив allFlowers из catalog.html
+        // В catalog.html - ЗАМЕНИТЕ весь массив allFlowers на этот:
+const allFlowers = [
+    {
+        id: 1,
+        name: "Георгины вегетативные низкорослые",
+        category: "roses",
+        price: 8,
+        oldPrice: 12,
+        description: "Красивые георгины для вашего сада",
+        image: "https://i.okcdn.ru/i?r=CFRAm_VFBkioSGBqh1KLntt06MFo4g5uSnK0cvpuqrPJ995xVi3fxSXrV17J_etk9d0segI-1U3enf481quDrAG8n2RMBiefhyQv195j0SSEkZlA_QAAACk",
+        additionalImages: [
+            "https://i.okcdn.ru/i?r=CFRAm_VFBkioSGBqh1L-Q6HqbHCWrB7TMQfD4uHb1U9QlM6-gu90yAdFwhFR_Ss2AZr4dlandPb91NdTV7XEdUGwflfxgfq799peuRD-t18gzqvtewAAACk",
+            "https://i.okcdn.ru/i?r=CFRAm_VFBkioSGBqh1IdniE7GUPPC8HhwHLqxIWeU0FuPGfPZWTZRZ0yxeWE9Y4QyJyIEdLAvDsmmrAjB01wCDVPmzDgxNsQ9OwGoqm2h0LAnWfjdAAAACk"
+        ],
+        specifications: {
+            "Тип": "Георгины",
+            "Высота": "30-40 см",
+            "Цвет": "Разные оттенки",
+            "Сезон цветения": "Лето-осень"
+        },
+        badge: "ХИТ",
+        popular: true
+    },
+    {
+        id: 2,
+        name: "Бальзамин новогвинейский",
+        category: "roses",
+        price: 9,
+        oldPrice: 15,
+        description: "Декоративный бальзамин с яркими цветами",
+        image: "https://i.okcdn.ru/i?r=CFRAm_VFBkioSGBqh1IKUtFwKHEdY8wagSMfym_uNdySumU0muPNNzMA_YkvAJr0qZWh0LUrQHkkrKLFoR_NKBNgH88vL7jCk33EPsT0KoYMXUWEAgAAACk",
+        additionalImages: [
+            "https://i.okcdn.ru/i?r=CFRAm_VFBkioSGBqh1JR8mnSjEMpnXylkk4uJj1sN_jEGADWqd1Jl2-M3TtHHQ3EYsVNLHp4wMgFpHdCSw_g_O4UshglpBoFAp2-QQQyGX90OfsnLwAAACk"
+        ],
+        badge: "ХИТ",
+        popular: true,
+        specifications: {
+            "Тип": "Бальзамин",
+            "Высота": "20-30 см",
+            "Цвет": "Яркие оттенки"
+        }
+    },
+    {
+        id: 3,
+        name: "Бегонии",
+        category: "roses",
+        price: 6,
+        oldPrice: 10,
+        description: "Красивые бегонии для дома и сада",
+        image: "https://i.okcdn.ru/i?r=CFxAm_VFBkioSGBqh1LamAAOc8pbUTclt-RyglJI6NK9iz8eUjTKfFt-d3OFUsyZsqltUpmMLTCX19JX_Uh8fEGjMNCf3zMd-p_D-QeyziEhVmlGoAgunXwsIg68AAAAKQ",
+        badge: "",
+        popular: true,
+        specifications: {
+            "Тип": "Бегония",
+            "Высота": "15-25 см",
+            "Цвет": "Разнообразные"
+        }
+    }
+];
+        
+        // Категории для хлебных крошек
+        const categories = {
+            "roses": "Розы",
+            "tulips": "Тюльпаны",
+            "lilies": "Лилии",
+            "orchids": "Орхидеи",
+            "chrysanthemums": "Хризантемы",
+            "peonies": "Пионы",
+            "bouquets": "Готовые букеты",
+            "exotic": "Экзотические",
+            "potted": "В горшках"
+        };
+        
+        // Текущий товар и индекс активного фото
+        let currentProduct = null;
+        let currentImageIndex = 0;
+        let productImages = [];
+        
+        // Корзина
+        let cart = JSON.parse(localStorage.getItem('flowerCart')) || [];
+        
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            // Отображаем информацию о пользователе
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                document.getElementById('user-greeting').textContent = `Привет, ${currentUser.name}!`;
+            }
+            
+            // Загружаем данные товара
+            loadProductData();
+            
+            // Настройка обработчиков событий
+            setupEventListeners();
+            
+            // Обновляем счетчик корзины
+            updateCartCount();
+        });
+        
+        // Загрузка данных товара
+        function loadProductData() {
+            // Ищем товар в массиве
+            currentProduct = allFlowers.find(p => p.id === productId);
+            
+            if (!currentProduct) {
+                // Если товар не найден, показываем ошибку
+                document.querySelector('.product-main').innerHTML = `
+                    <div style="text-align: center; padding: 50px; width: 100%;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--pale-red); margin-bottom: 20px;"></i>
+                        <h2 style="color: var(--dark-red); margin-bottom: 10px;">Товар не найден</h2>
+                        <p style="color: var(--text-gray); margin-bottom: 30px;">Товар с ID ${productId} не найден в базе данных.</p>
+                        <p style="color: var(--text-gray); margin-bottom: 30px;">Проверьте массив allFlowers в скрипте.</p>
+                        <a href="catalog.html" class="btn btn-primary">Вернуться в каталог</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Для отладки: выводим в консоль найденный товар
+            console.log('Найден товар:', currentProduct);
+            
+            // Устанавливаем все изображения товара
+            productImages = [currentProduct.image];
+            if (currentProduct.additionalImages && currentProduct.additionalImages.length > 0) {
+                // Добавляем дополнительные изображения, если они есть и не пустые
+                currentProduct.additionalImages.forEach(img => {
+                    if (img && img.trim() !== '') {
+                        productImages.push(img);
+                    }
+                });
+            }
+            
+            // Заполняем данные на странице
+            document.getElementById('product-title').textContent = currentProduct.name;
+            document.getElementById('current-price').textContent = currentProduct.price.toLocaleString();
+            document.getElementById('product-article').textContent = currentProduct.id.toString().padStart(6, '0');
+            document.getElementById('description-content').textContent = currentProduct.description || 'Описание отсутствует';
+            
+            // Старая цена и скидка
+            if (currentProduct.oldPrice) {
+                document.getElementById('old-price').textContent = `${currentProduct.oldPrice} руб.`;
+                const discountPercent = Math.round((1 - currentProduct.price / currentProduct.oldPrice) * 100);
+                document.getElementById('discount-percent').textContent = `-${discountPercent}%`;
+                document.getElementById('discount-percent').style.display = 'inline-block';
+            } else {
+                document.getElementById('old-price').style.display = 'none';
+                document.getElementById('discount-percent').style.display = 'none';
+            }
+            
+            // Хлебные крошки
+            const categoryName = categories[currentProduct.category] || currentProduct.category;
+            document.getElementById('category-breadcrumb').textContent = categoryName;
+            document.getElementById('category-breadcrumb').href = `catalog.html?category=${currentProduct.category}`;
+            document.getElementById('product-breadcrumb').textContent = currentProduct.name;
+            
+            // Характеристики
+            renderSpecifications();
+            
+            // Галерея фотографий
+            renderGallery();
+            
+            // Похожие товары
+            renderSimilarProducts();
+            
+            // Проверяем, находится ли товар в избранном
+            updateFavoriteButton();
+        }
+        
+        // Рендер характеристик
+        function renderSpecifications() {
+            const specsTable = document.getElementById('specs-table');
+            
+            if (currentProduct.specifications) {
+                let specsHTML = '';
+                for (const [key, value] of Object.entries(currentProduct.specifications)) {
+                    specsHTML += `
+                        <tr>
+                            <td>${key}</td>
+                            <td>${value}</td>
+                        </tr>
+                    `;
+                }
+                specsTable.innerHTML = specsHTML;
+            } else {
+                // Стандартные характеристики, если их нет у товара
+                specsTable.innerHTML = `
+                    <tr>
+                        <td>Тип цветка</td>
+                        <td>${currentProduct.name.split(' ')[0]}</td>
+                    </tr>
+                    <tr>
+                        <td>Категория</td>
+                        <td>${categories[currentProduct.category] || currentProduct.category}</td>
+                    </tr>
+                    <tr>
+                        <td>Цена</td>
+                        <td>${currentProduct.price} руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Наличие</td>
+                        <td>В наличии</td>
+                    </tr>
+                    <tr>
+                        <td>Срок доставки</td>
+                        <td>1-3 дня</td>
+                    </tr>
+                `;
+            }
+        }
+        
+        // Рендер галереи
+        function renderGallery() {
+            const mainImage = document.getElementById('main-image');
+            const thumbnailsContainer = document.getElementById('thumbnails-container');
+            const imageCounter = document.getElementById('image-counter');
+            
+            // Устанавливаем первое изображение
+            if (productImages.length > 0) {
+                mainImage.src = productImages[0];
+                mainImage.alt = currentProduct.name;
+            }
+            
+            // Обновляем счетчик
+            imageCounter.textContent = `${currentImageIndex + 1} / ${productImages.length}`;
+            
+            // Создаем миниатюры
+            thumbnailsContainer.innerHTML = '';
+            productImages.forEach((imgSrc, index) => {
+                if (imgSrc && imgSrc.trim() !== '') {
+                    const thumbnail = document.createElement('div');
+                    thumbnail.className = `thumbnail ${index === currentImageIndex ? 'active' : ''}`;
+                    thumbnail.innerHTML = `<img src="${imgSrc}" alt="${currentProduct.name} - фото ${index + 1}" onerror="this.src='https://via.placeholder.com/80x80?text=Нет+фото'">`;
+                    thumbnail.addEventListener('click', () => {
+                        changeImage(index);
+                    });
+                    thumbnailsContainer.appendChild(thumbnail);
+                }
+            });
+        }
+        
+        // Смена изображения
+        function changeImage(index) {
+            if (index < 0 || index >= productImages.length) return;
+            
+            currentImageIndex = index;
+            const mainImage = document.getElementById('main-image');
+            const imageCounter = document.getElementById('image-counter');
+            
+            // Плавная смена изображения
+            mainImage.style.opacity = '0';
+            setTimeout(() => {
+                mainImage.src = productImages[currentImageIndex];
+                mainImage.style.opacity = '1';
+            }, 200);
+            
+            // Обновляем счетчик
+            imageCounter.textContent = `${currentImageIndex + 1} / ${productImages.length}`;
+            
+            // Обновляем активную миниатюру
+            document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === currentImageIndex);
+            });
+        }
+        
+        // Рендер похожих товаров
+        function renderSimilarProducts() {
+            const similarContainer = document.getElementById('similar-products');
+            
+            // Находим товары из той же категории (кроме текущего)
+            const similarProducts = allFlowers
+                .filter(p => p.category === currentProduct.category && p.id !== currentProduct.id)
+                .slice(0, 4); // Берем максимум 4 товара
+            
+            if (similarProducts.length === 0) {
+                similarContainer.innerHTML = '<p style="text-align: center; color: var(--text-gray); grid-column: 1/-1;">Нет похожих товаров</p>';
+                return;
+            }
+            
+            let similarHTML = '';
+            similarProducts.forEach(product => {
+                similarHTML += `
+                    <div class="product-card" style="background-color: var(--white); border-radius: var(--border-radius); overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                        ${product.badge ? `<div class="product-badge" style="position: absolute; top: 15px; left: 15px; background-color: var(--primary-red); color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem;">${product.badge}</div>` : ''}
+                        <div class="product-image" style="height: 200px; overflow: hidden;">
+                            <img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="product-content" style="padding: 15px;">
+                            <h3 class="product-title" style="font-size: 1.1rem; margin-bottom: 10px;">${product.name}</h3>
+                            <div class="product-price" style="color: var(--primary-red); font-size: 1.4rem; font-weight: bold; margin-bottom: 15px;">
+                                ${product.oldPrice ? `<span style="text-decoration: line-through; color: #999; font-size: 1rem; margin-right: 5px;">${product.oldPrice} руб.</span>` : ''}
+                                ${product.price} руб.
+                            </div>
+                            <div class="product-actions" style="display: flex; gap: 10px;">
+                                <button class="btn btn-primary btn-small" onclick="addToCart(${product.id})" style="padding: 8px 15px; font-size: 0.9rem;">В корзину</button>
+                                <button class="btn-outline" onclick="viewProduct(${product.id})" style="padding: 8px 15px; border: 1px solid var(--primary-red); color: var(--primary-red); background: none; border-radius: var(--border-radius);">Подробнее</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            similarContainer.innerHTML = similarHTML;
+        }
+        
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Навигация по галерее
+            document.getElementById('prev-image').addEventListener('click', () => {
+                let newIndex = currentImageIndex - 1;
+                if (newIndex < 0) newIndex = productImages.length - 1;
+                changeImage(newIndex);
+            });
+            
+            document.getElementById('next-image').addEventListener('click', () => {
+                let newIndex = currentImageIndex + 1;
+                if (newIndex >= productImages.length) newIndex = 0;
+                changeImage(newIndex);
+            });
+            
+            // Добавление в корзину
+            document.getElementById('add-to-cart-detail').addEventListener('click', () => {
+                if (currentProduct) {
+                    addToCart(currentProduct.id);
+                }
+            });
+            
+            // Добавление в избранное
+            document.getElementById('add-to-favorite').addEventListener('click', () => {
+                if (currentProduct) {
+                    addToFavorites(currentProduct.id);
+                }
+            });
+            
+            // Выход из аккаунта
+            document.getElementById('logout').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            });
+            
+            // Открытие корзины
+            document.getElementById('open-cart').addEventListener('click', function() {
+                window.location.href = 'cart.html';
+            });
+        }
+        
+        // Функция для просмотра другого товара
+        window.viewProduct = function(productId) {
+            window.location.href = `product-details.html?id=${productId}`;
+        };
+        
+        // Добавление в корзину
+        window.addToCart = function(productId) {
+            const product = allFlowers.find(p => p.id === productId);
+            
+            if (!product) return;
+            
+            // Проверяем, есть ли товар уже в корзине
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                });
+            }
+            
+            // Сохраняем в localStorage
+            localStorage.setItem('flowerCart', JSON.stringify(cart));
+            
+            // Обновляем корзину
+            updateCartCount();
+            
+            // Показываем уведомление
+            showNotification(`"${product.name}" добавлен в корзину!`);
+        };
+        
+        // ФУНКЦИИ ДЛЯ ИЗБРАННОГО
+        
+        // Сохранение избранного
+        function saveFavoritesToStorage(productId, addToFavorites = true) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return false;
+            
+            const users = JSON.parse(localStorage.getItem('flowerShopUsers')) || [];
+            const userIndex = users.findIndex(u => u.email === currentUser.email);
+            
+            if (userIndex !== -1) {
+                if (!users[userIndex].favorites) {
+                    users[userIndex].favorites = [];
+                }
+                
+                if (addToFavorites) {
+                    if (!users[userIndex].favorites.includes(productId)) {
+                        users[userIndex].favorites.push(productId);
+                    }
+                } else {
+                    users[userIndex].favorites = users[userIndex].favorites.filter(id => id !== productId);
+                }
+                
+                localStorage.setItem('flowerShopUsers', JSON.stringify(users));
+                return true;
+            }
+            return false;
+        }
+        
+        // Проверка статуса избранного
+        function checkFavoriteStatus(productId) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return false;
+            
+            const users = JSON.parse(localStorage.getItem('flowerShopUsers')) || [];
+            const user = users.find(u => u.email === currentUser.email);
+            
+            if (user && user.favorites) {
+                return user.favorites.includes(productId);
+            }
+            return false;
+        }
+        
+        // Обновление состояния кнопки избранного
+        function updateFavoriteButton() {
+            if (!currentProduct) return;
+            
+            const isFavorite = checkFavoriteStatus(currentProduct.id);
+            const favoriteBtn = document.getElementById('add-to-favorite');
+            const icon = favoriteBtn.querySelector('i');
+            
+            if (isFavorite) {
+                favoriteBtn.classList.add('active');
+                icon.className = 'fas fa-heart';
+                favoriteBtn.setAttribute('data-favorite', 'true');
+            } else {
+                favoriteBtn.classList.remove('active');
+                icon.className = 'far fa-heart';
+                favoriteBtn.setAttribute('data-favorite', 'false');
+            }
+        }
+        
+        // Добавление в избранное
+        function addToFavorites(productId) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                showNotification('Пожалуйста, войдите в аккаунт чтобы добавлять товары в избранное');
+                return;
+            }
+            
+            const isFavorite = checkFavoriteStatus(productId);
+            const product = allFlowers.find(p => p.id === productId);
+            
+            if (!isFavorite) {
+                // Добавляем в избранное
+                if (saveFavoritesToStorage(productId, true)) {
+                    showNotification(`"${product.name}" добавлен в избранное!`);
+                    updateFavoriteButton();
+                }
+            } else {
+                // Удаляем из избранного
+                if (saveFavoritesToStorage(productId, false)) {
+                    showNotification(`"${product.name}" удален из избранного`);
+                    updateFavoriteButton();
+                }
+            }
+        }
+        
+        // Обновление счетчика корзины
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+        }
+        
+        // Показать уведомление
+        function showNotification(message) {
+            // Создаем уведомление, если его нет
+            let notification = document.getElementById('notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'notification';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background-color: var(--primary-red);
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: var(--border-radius);
+                    z-index: 10000;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                    display: none;
+                `;
+                document.body.appendChild(notification);
+            }
+            
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

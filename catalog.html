@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цветнечёк у Олечки | Каталог</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Специфичные стили для каталога */
+        
+        .catalog-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            display: flex;
+            gap: 30px;
+        }
+        
+        /* Боковая панель категорий */
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 180px;
+            border: 1px solid var(--pale-red);
+        }
+        
+        .sidebar-title {
+            color: var(--primary-red);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--pale-red);
+        }
+        
+        .categories-list {
+            list-style: none;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .categories-list li {
+            margin-bottom: 12px;
+        }
+        
+        .categories-list a {
+            color: var(--dark-gray);
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .categories-list a:hover {
+            background-color: var(--pale-red);
+            color: var(--primary-red);
+            border-left: 3px solid var(--primary-red);
+        }
+        
+        .categories-list a.active {
+            background-color: var(--pale-red);
+            color: var(--primary-red);
+            border-left: 3px solid var(--primary-red);
+            font-weight: 600;
+        }
+        
+        .category-count {
+            float: right;
+            background-color: var(--light-gray);
+            color: var(--text-gray);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+        }
+        
+        /* Основная часть каталога */
+        .main-content {
+            flex: 1;
+        }
+        
+        .page-title {
+            color: var(--dark-red);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-family: 'Brush Script MT', cursive;
+        }
+        
+        .page-subtitle {
+            color: var(--text-gray);
+            margin-bottom: 30px;
+        }
+        
+        /* Поиск и фильтры */
+        .search-container {
+            background-color: var(--pale-red);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid var(--primary-red);
+            border-radius: 30px;
+            font-size: 1rem;
+            background-color: var(--white);
+        }
+        
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-select {
+            padding: 10px 15px;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
+            background-color: var(--white);
+            color: var(--dark-gray);
+            min-width: 150px;
+        }
+        
+        /* Цветы в выбранной категории */
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--pale-red);
+        }
+        
+        .current-category {
+            font-size: 1.8rem;
+            color: var(--primary-red);
+        }
+        
+        .products-count {
+            color: var(--text-gray);
+        }
+        
+        /* Сетка товаров */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        
+        .product-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            position: relative;
+            border: 1px solid var(--pale-red);
+        }
+        
+        .product-card:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--primary-red);
+            color: var(--white);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1;
+        }
+        
+        .product-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .product-content {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 1.3rem;
+            color: var(--dark-gray);
+            margin-bottom: 10px;
+            height: 60px;
+            overflow: hidden;
+        }
+        
+        .product-description {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            height: 40px;
+            overflow: hidden;
+        }
+        
+        .product-price {
+            color: var(--primary-red);
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .old-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-outline {
+            padding: 10px 20px;
+            background-color: transparent;
+            color: var(--primary-red);
+            border: 2px solid var(--primary-red);
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--pale-red);
+        }
+        
+        /* Пагинация */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+        
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--medium-gray);
+            background-color: var(--white);
+            color: var(--dark-gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .page-btn:hover {
+            background-color: var(--pale-red);
+            color: var(--primary-red);
+        }
+        
+        .page-btn.active {
+            background-color: var(--primary-red);
+            color: var(--white);
+            border-color: var(--primary-red);
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 1100px) {
+            .catalog-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: 100%;
+            }
+            
+            .category-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Проверка авторизации -->
+    <script>
+        if (!localStorage.getItem('currentUser')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+    
+    <!-- Шапка сайта -->
+<header class="header">
+    <div class="header-container">
+        <div class="header-main">
+            <div class="logo-section">
+                <div class="logo-icon-wrapper">
+                    <i class="fas fa-spa"></i>
+                </div>
+                <div class="logo-text">
+                    <h1 class="logo-title">Цветничок у Оли</h1>
+                    <p class="logo-subtitle">Красивые цветы для вашего настроения</p>
+                </div>
+            </div>
+            
+            <div class="header-contacts">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <div class="contact-info">
+                        <span class="contact-number">+375 25 530-99-49</span>
+                        <span class="contact-number">+375 33 623-94-33</span>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="contact-address">г.п. Вороново, ул. Аэродромная, д. 25</span>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <div class="user-section">
+                    <span id="user-greeting"></span>
+                    <a href="#" id="logout" class="logout-btn">Выйти</a>
+                </div>
+                <a href="cart.html" class="cart-button" id="open-cart">
+                    <i class="fas fa-shopping-basket"></i>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+        
+        <nav class="main-nav">
+            <a href="home.html" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </a>
+            <a href="catalog.html" class="nav-link active">
+                <i class="fas fa-th-large"></i>
+                <span>Каталог</span>
+            </a>
+            <a href="contacts.html" class="nav-link">
+                <i class="fas fa-address-book"></i>
+                <span>Контакты</span>
+            </a>
+            <a href="account.html" class="nav-link">
+                <i class="fas fa-user"></i>
+                <span>Мой аккаунт</span>
+            </a>
+                        </a>
+  <a href="news.html" class="nav-link">
+                <i class="fas fa-newspaper"></i>
+                <span>Новости</span>
+            </a>
+        </nav>
+    </div>
+</header>
+    <!-- Поисковая строка -->
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" class="search-input" id="search-input" placeholder="Поиск цветов, букетов...">
+            <button class="btn btn-primary" id="search-btn"><i class="fas fa-search"></i> Найти</button>
+        </div>
+        
+        <div class="filters">
+            <select class="filter-select" id="sort-select">
+                <option value="default">Сортировка</option>
+                <option value="price-asc">По возрастанию цены</option>
+                <option value="price-desc">По убыванию цены</option>
+                <option value="popular">Популярные</option>
+                <option value="new">Новинки</option>
+            </select>
+            
+            <select class="filter-select" id="price-filter">
+                <option value="all">Все цены</option>
+                <option value="0-5">До 5 руб.</option>
+                <option value="5-10">5 - 10 руб.</option>
+                <option value="10-20">10 - 15 руб.</option>
+                <option value="20+">От 20 руб.</option>
+            </select>
+        </div>
+    </div>
+    
+    <!-- Основной контент каталога -->
+    <div class="catalog-container">
+        <!-- Боковая панель категорий -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title">Категории цветов</h3>
+            <ul class="categories-list" id="categories-list">
+                <!-- Категории будут добавлены через JavaScript -->
+            </ul>
+        </aside>
+        
+        <!-- Основная часть -->
+        <main class="main-content">
+            <h1 class="page-title" id="page-title">Каталог цветов</h1>
+            <p class="page-subtitle" id="page-subtitle">Более 80 видов цветов и букетов</p>
+            
+            <div class="category-header">
+                <div>
+                    <h2 class="current-category" id="current-category">Все цветы</h2>
+                    <p class="products-count" id="products-count">Загрузка...</p>
+                </div>
+            </div>
+            
+            <!-- Сетка товаров -->
+            <div class="products-grid" id="products-grid">
+                <!-- Товары будут добавлены через JavaScript -->
+            </div>
+            
+            <!-- Пагинация -->
+            <div class="pagination" id="pagination">
+                <!-- Кнопки пагинации будут добавлены через JavaScript -->
+            </div>
+        </main>
+    </div>
+    
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Цветнечёк у Олечки</h3>
+                <p>Магазин цветов с душой. Мы создаем красивые букеты, которые дарят радость и выражают ваши чувства.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-vk"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Магазин</h3>
+                <ul class="footer-links">
+                    <li><a href="catalog.html">Каталог букетов</a></li>
+                    <li><a href="home.html">Акции и скидки</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Помощь</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Доставка и оплата</a></li>
+                    <li><a href="#">Уход за цветами</a></li>
+                    <li><a href="#">Частые вопросы</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Контакты</h3>
+                <p><i class="fas fa-map-marker-alt"></i> г.п. Вороново, ул. Аэродромная, д. 25</p>
+                <p><i class="fas fa-phone"></i> +375 25 530-99-49 / +375 (33) 623-94-33</p>
+                <p><i class="fas fa-envelope"></i> ilyabalt345ilya1@gmail.com / olgabalts@gmail.com</p>
+                <p><i class="fas fa-clock"></i> Ежедневно с 10:00 до 20:00</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 Магазин цветов "Цветнечёк у Олечки". Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Данные пользователя
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        
+        // ДОБАВЬТЕ ЭТИ ПЕРЕМЕННЫЕ
+        let currentCategory = 'all';
+        let currentPage = 1;
+        const itemsPerPage = 12;
+
+// Категории цветов
+const categories = [
+    { id: 'all', name: 'Все цветы', count: 3 },
+    { id: 'roses', name: 'Розы', count: 3 },
+    { id: 'tulips', name: 'Тюльпаны', count: 0 },
+    { id: 'lilies', name: 'Лилии', count: 0 },
+    { id: 'orchids', name: 'Орхидеи', count: 0 },
+    { id: 'chrysanthemums', name: 'Хризантемы', count: 0 },
+    { id: 'peonies', name: 'Пионы', count: 0 },
+    { id: 'bouquets', name: 'Готовые букеты', count: 0 },
+    { id: 'exotic', name: 'Экзотические', count: 0 },
+    { id: 'potted', name: 'В горшках', count: 0 }
+];
+
+      // В catalog.html - ЗАМЕНИТЕ весь массив allFlowers на этот:
+const allFlowers = [
+    {
+        id: 1,
+        name: "Георгины вегетативные низкорослые",
+        category: "roses",
+        price: 8,
+        oldPrice: 12,
+        description: "Красивые георгины для вашего сада",
+        image: "https://i.okcdn.ru/i?r=CFRAm_VFBkioSGBqh1KLntt06MFo4g5uSnK0cvpuqrPJ995xVi3fxSXrV17J_etk9d0segI-1U3enf481quDrAG8n2RMBiefhyQv195j0SSEkZlA_QAAACk",
+        additionalImages: [
+            "https://i.okcdn.ru/i?r=CFRAm_VFBkioSGBqh1L-Q6HqbHCWrB7TMQfD4uHb1U9QlM6-gu90yAdFwhFR_Ss2AZr4dlandPb91NdTV7XEdUGwflfxgfq799peuRD-t18gzqvtewAAACk",
+            "https://i.okcdn.ru/i?r=CFRAm_VFBkioSGBqh1IdniE7GUPPC8HhwHLqxIWeU0FuPGfPZWTZRZ0yxeWE9Y4QyJyIEdLAvDsmmrAjB01wCDVPmzDgxNsQ9OwGoqm2h0LAnWfjdAAAACk"
+        ],
+        specifications: {
+            "Тип": "Георгины",
+            "Высота": "30-40 см",
+            "Цвет": "Разные оттенки",
+            "Сезон цветения": "Лето-осень"
+        },
+        badge: "ХИТ",
+        popular: true
+    },
+    {
+        id: 2,
+        name: "Бальзамин новогвинейский",
+        category: "roses",
+        price: 9,
+        oldPrice: 15,
+        description: "Декоративный бальзамин с яркими цветами",
+        image: "https://i.okcdn.ru/i?r=CFRAm_VFBkioSGBqh1IKUtFwKHEdY8wagSMfym_uNdySumU0muPNNzMA_YkvAJr0qZWh0LUrQHkkrKLFoR_NKBNgH88vL7jCk33EPsT0KoYMXUWEAgAAACk",
+        additionalImages: [
+            "https://i.okcdn.ru/i?r=CFRAm_VFBkioSGBqh1JR8mnSjEMpnXylkk4uJj1sN_jEGADWqd1Jl2-M3TtHHQ3EYsVNLHp4wMgFpHdCSw_g_O4UshglpBoFAp2-QQQyGX90OfsnLwAAACk"
+        ],
+        badge: "ХИТ",
+        popular: true,
+        specifications: {
+            "Тип": "Бальзамин",
+            "Высота": "20-30 см",
+            "Цвет": "Яркие оттенки"
+        }
+    },
+    {
+        id: 3,
+        name: "Бегонии",
+        category: "roses",
+        price: 6,
+        oldPrice: 10,
+        description: "Красивые бегонии для дома и сада",
+        image: "https://i.okcdn.ru/i?r=CFxAm_VFBkioSGBqh1LamAAOc8pbUTclt-RyglJI6NK9iz8eUjTKfFt-d3OFUsyZsqltUpmMLTCX19JX_Uh8fEGjMNCf3zMd-p_D-QeyziEhVmlGoAgunXwsIg68AAAAKQ",
+        badge: "",
+        popular: true,
+        specifications: {
+            "Тип": "Бегония",
+            "Высота": "15-25 см",
+            "Цвет": "Разнообразные"
+        }
+    }
+];
+        // === КОНЕЦ ДОБАВЛЕНИЯ ===
+
+        // Корзина
+        let cart = JSON.parse(localStorage.getItem('flowerCart')) || [];
+        
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            // Отображаем информацию о пользователе
+            if (currentUser) {
+                document.getElementById('user-greeting').textContent = `Привет, ${currentUser.name}!`;
+            }
+            
+            // Загружаем категории
+            loadCategories();
+            
+            // Загружаем товары
+            loadProducts();
+            
+            // Обработчики событий
+            setupEventListeners();
+            
+            // Обновляем корзину
+            updateCartCount();
+        });
+        
+        // Загрузка категорий
+        function loadCategories() {
+            const categoriesList = document.getElementById('categories-list');
+            categoriesList.innerHTML = '';
+            
+            categories.forEach(category => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <a href="#" class="${category.id === currentCategory ? 'active' : ''}" data-category="${category.id}">
+                        ${category.name}
+                        <span class="category-count">${category.count}</span>
+                    </a>
+                `;
+                categoriesList.appendChild(li);
+            });
+            
+            // Обработчики кликов по категориям
+            document.querySelectorAll('#categories-list a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Обновляем активную категорию
+                    document.querySelectorAll('#categories-list a').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Меняем категорию
+                    currentCategory = this.getAttribute('data-category');
+                    currentPage = 1;
+                    
+                    // Обновляем заголовок
+                    const category = categories.find(c => c.id === currentCategory);
+                    document.getElementById('current-category').textContent = category.name;
+                    document.getElementById('page-title').textContent = `Каталог: ${category.name}`;
+                    
+                    // Загружаем товары
+                    loadProducts();
+                });
+            });
+        }
+        
+        // Загрузка товаров
+        function loadProducts() {
+            // Фильтруем товары по категории
+            let filteredProducts = currentCategory === 'all' 
+                ? allFlowers 
+                : allFlowers.filter(product => product.category === currentCategory);
+            
+            // Применяем поиск
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            if (searchTerm) {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) || 
+                    product.description.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Применяем фильтр цены
+            const priceFilter = document.getElementById('price-filter').value;
+            if (priceFilter !== 'all') {
+                const [min, max] = priceFilter.split('-').map(p => {
+                    if (p.includes('+')) return parseInt(p) || Infinity;
+                    return parseInt(p);
+                });
+                
+                filteredProducts = filteredProducts.filter(product => {
+                    if (max === Infinity) return product.price >= min;
+                    return product.price >= min && product.price <= max;
+                });
+            }
+            
+            // Применяем сортировку
+            const sortBy = document.getElementById('sort-select').value;
+            filteredProducts = sortProducts(filteredProducts, sortBy);
+            
+            // Обновляем счетчик товаров
+            document.getElementById('products-count').textContent = `Найдено ${filteredProducts.length} товаров`;
+            
+            // Пагинация
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageProducts = filteredProducts.slice(startIndex, endIndex);
+            
+            // Отображаем товары
+            renderProducts(pageProducts);
+            
+            // Отображаем пагинацию
+            renderPagination(totalPages);
+        }
+        
+        // Сортировка товаров
+        function sortProducts(products, sortType) {
+            const sorted = [...products];
+            
+            switch(sortType) {
+                case 'price-asc':
+                    return sorted.sort((a, b) => a.price - b.price);
+                case 'price-desc':
+                    return sorted.sort((a, b) => b.price - a.price);
+                case 'popular':
+                    return sorted.sort((a, b) => {
+                        if (a.popular && !b.popular) return -1;
+                        if (!a.popular && b.popular) return 1;
+                        return 0;
+                    });
+                case 'new':
+                    // Для демо - новые товары имеют ID > 70
+                    return sorted.sort((a, b) => b.id - a.id);
+                default:
+                    return sorted;
+            }
+        }
+        
+        // Отображение товаров
+        function renderProducts(products) {
+            const productsGrid = document.getElementById('products-grid');
+            productsGrid.innerHTML = '';
+            
+            if (products.length === 0) {
+                productsGrid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                        <i class="fas fa-search" style="font-size: 3rem; color: var(--pale-red); margin-bottom: 20px;"></i>
+                        <h3 style="color: var(--dark-red); margin-bottom: 10px;">Товары не найдены</h3>
+                        <p style="color: var(--text-gray);">Попробуйте изменить параметры поиска</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                // Проверяем, находится ли товар в избранном
+                const isFavorite = checkFavoriteStatus(product.id);
+                const favoriteIcon = isFavorite ? 'fas fa-heart' : 'far fa-heart';
+                
+                productCard.innerHTML = `
+                    ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                    <button class="favorite-btn" onclick="toggleFavorite(${product.id})" style="position: absolute; top: 15px; right: 15px; width: 35px; height: 35px; border-radius: 50%; background: white; border: none; color: ${isFavorite ? 'var(--primary-red)' : '#ccc'}; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: all 0.3s;">
+                        <i class="${favoriteIcon}"></i>
+                    </button>
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-price">
+                            ${product.oldPrice ? `<span class="old-price">${product.oldPrice} руб.</span>` : ''}
+                            ${product.price} руб.
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="addToCart(${product.id})">В корзину</button>
+                            <button class="btn-outline" onclick="showProductDetails(${product.id})">Подробнее</button>
+                        </div>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+        }
+        
+        // Отображение пагинации
+        function renderPagination(totalPages) {
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let paginationHTML = '';
+            
+            // Предыдущая страница
+            if (currentPage > 1) {
+                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></button>`;
+            }
+            
+            // Страницы
+            const maxVisible = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+            
+            if (endPage - startPage + 1 < maxVisible) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            
+            // Следующая страница
+            if (currentPage < totalPages) {
+                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></button>`;
+            }
+            
+            pagination.innerHTML = paginationHTML;
+        }
+        
+        // Смена страницы
+        window.changePage = function(page) {
+            currentPage = page;
+            loadProducts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Поиск
+            document.getElementById('search-btn').addEventListener('click', function() {
+                currentPage = 1;
+                loadProducts();
+            });
+            
+            document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    currentPage = 1;
+                    loadProducts();
+                }
+            });
+            
+            // Фильтры
+            document.getElementById('sort-select').addEventListener('change', function() {
+                currentPage = 1;
+                loadProducts();
+            });
+            
+            document.getElementById('price-filter').addEventListener('change', function() {
+                currentPage = 1;
+                loadProducts();
+            });
+            
+            // Выход из аккаунта
+            document.getElementById('logout').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            });
+        }
+        
+        // Добавление в корзину
+        window.addToCart = function(productId) {
+            const product = allFlowers.find(p => p.id === productId);
+            
+            if (!product) return;
+            
+            // Проверяем, есть ли товар уже в корзине
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                });
+            }
+            
+            // Сохраняем в localStorage
+            localStorage.setItem('flowerCart', JSON.stringify(cart));
+            
+            // Обновляем корзину
+            updateCartCount();
+            
+            // Показываем уведомление
+            showNotification(`"${product.name}" добавлен в корзину!`);
+        };
+        
+        // Показать детали товара - ПЕРЕХОД НА ОТДЕЛЬНУЮ СТРАНИЦУ
+        window.showProductDetails = function(productId) {
+            // Переходим на страницу деталей товара с параметром ID
+            window.location.href = `product-details.html?id=${productId}`;
+        };
+        
+        // Обновление счетчика корзины
+        function updateCartCount() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').textContent = totalItems;
+        }
+        
+        // Показать уведомление
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            if (!notification) {
+                // Создаем элемент уведомления
+                const notificationEl = document.createElement('div');
+                notificationEl.id = 'notification';
+                notificationEl.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background-color: var(--primary-red);
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: var(--border-radius);
+                    z-index: 10000;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                    display: none;
+                    transition: all 0.3s;
+                `;
+                document.body.appendChild(notificationEl);
+            }
+            
+            const notificationEl = document.getElementById('notification');
+            notificationEl.textContent = message;
+            notificationEl.style.display = 'block';
+            
+            setTimeout(() => {
+                notificationEl.style.display = 'none';
+            }, 3000);
+        }
+
+        // ФУНКЦИИ ДЛЯ ИЗБРАННОГО
+        
+        // Проверка статуса избранного
+        function checkFavoriteStatus(productId) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return false;
+            
+            const users = JSON.parse(localStorage.getItem('flowerShopUsers')) || [];
+            const user = users.find(u => u.email === currentUser.email);
+            
+            if (user && user.favorites) {
+                return user.favorites.includes(productId);
+            }
+            return false;
+        }
+
+        // Переключение избранного
+        window.toggleFavorite = function(productId) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                showNotification('Войдите в аккаунт чтобы добавить в избранное');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('flowerShopUsers')) || [];
+            const userIndex = users.findIndex(u => u.email === currentUser.email);
+            
+            if (userIndex !== -1) {
+                if (!users[userIndex].favorites) {
+                    users[userIndex].favorites = [];
+                }
+                
+                const isFavorite = users[userIndex].favorites.includes(productId);
+                const product = allFlowers.find(p => p.id === productId);
+                
+                if (!isFavorite) {
+                    // Добавляем в избранное
+                    users[userIndex].favorites.push(productId);
+                    localStorage.setItem('flowerShopUsers', JSON.stringify(users));
+                    
+                    // Обновляем иконку
+                    const heartIcon = event.target.closest('.favorite-btn').querySelector('i');
+                    heartIcon.className = 'fas fa-heart';
+                    event.target.closest('.favorite-btn').style.color = 'var(--primary-red)';
+                    
+                    showNotification(`"${product.name}" добавлен в избранное!`);
+                } else {
+                    // Удаляем из избранного
+                    users[userIndex].favorites = users[userIndex].favorites.filter(id => id !== productId);
+                    localStorage.setItem('flowerShopUsers', JSON.stringify(users));
+                    
+                    // Обновляем иконку
+                    const heartIcon = event.target.closest('.favorite-btn').querySelector('i');
+                    heartIcon.className = 'far fa-heart';
+                    event.target.closest('.favorite-btn').style.color = '#ccc';
+                    
+                    showNotification(`"${product.name}" удален из избранного`);
+                }
+            }
+        };
+    </script>
+</body>
+</html>

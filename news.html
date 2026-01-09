@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цветничок у Оли | Новости</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Специфичные стили для страницы новостей */
+        
+        /* Герой-секция */
+        .news-hero {
+            background: linear-gradient(rgba(211, 47, 47, 0.8), rgba(211, 47, 47, 0.9)), 
+                        url('https://images.unsplash.com/photo-1495147466023-ac5c588e2e94?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            text-align: center;
+            padding: 80px 20px;
+            margin-bottom: 60px;
+        }
+        
+        .news-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .news-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-family: 'Brush Script MT', cursive;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .news-hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Основной контент */
+        .news-section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .news-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--dark-red);
+            margin-bottom: 50px;
+            font-family: 'Brush Script MT', cursive;
+        }
+        
+        /* Фильтры новостей */
+        .news-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .filter-btn {
+            padding: 10px 25px;
+            background-color: var(--white);
+            border: 2px solid var(--pale-red);
+            border-radius: 30px;
+            color: var(--dark-gray);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background-color: var(--primary-red);
+            color: var(--white);
+            border-color: var(--primary-red);
+        }
+        
+        /* Сетка новостей */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+        
+        .news-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            border: 1px solid var(--pale-red);
+            height: 100%;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .news-badge {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            background-color: var(--primary-red);
+            color: var(--white);
+            padding: 8px 20px;
+            border-radius: 0 20px 20px 0;
+            font-weight: bold;
+            z-index: 1;
+        }
+        
+        .news-badge.new {
+            background-color: #27ae60;
+        }
+        
+        .news-badge.event {
+            background-color: #3498db;
+        }
+        
+        .news-badge.sale {
+            background-color: #e74c3c;
+        }
+        
+        .news-image {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .news-card:hover .news-image img {
+            transform: scale(1.05);
+        }
+        
+        .news-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .news-date {
+            color: var(--primary-red);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .news-date i {
+            font-size: 1rem;
+        }
+        
+        .news-card-title {
+            font-size: 1.5rem;
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        
+        .news-excerpt {
+            color: var(--text-gray);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+        
+        .news-read-more {
+            color: var(--primary-red);
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .news-read-more:hover {
+            color: var(--dark-red);
+            gap: 12px;
+        }
+        
+        /* Подписка на новости */
+        .news-subscribe {
+            background: linear-gradient(135deg, var(--pale-red) 0%, #ffcdd2 100%);
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: var(--border-radius);
+            margin-bottom: 80px;
+            border: 1px solid rgba(211, 47, 47, 0.2);
+        }
+        
+        .news-subscribe-title {
+            font-size: 2.2rem;
+            color: var(--dark-red);
+            margin-bottom: 20px;
+            font-family: 'Brush Script MT', cursive;
+        }
+        
+        .news-subscribe-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .news-subscribe-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+        }
+        
+        /* Архив новостей */
+        .news-archive {
+            margin-bottom: 80px;
+        }
+        
+        .archive-title {
+            font-size: 2rem;
+            color: var(--dark-red);
+            margin-bottom: 30px;
+            text-align: center;
+            font-family: 'Brush Script MT', cursive;
+        }
+        
+        .archive-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .archive-item {
+            padding: 20px;
+            border-bottom: 1px solid var(--pale-red);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+        
+        .archive-item:hover {
+            background-color: rgba(255, 175, 183, 0.1);
+        }
+        
+        .archive-item-date {
+            color: var(--text-gray);
+            font-weight: 600;
+            min-width: 120px;
+        }
+        
+        .archive-item-title {
+            color: var(--dark-gray);
+            flex-grow: 1;
+            margin: 0 20px;
+        }
+        
+        .archive-item-link {
+            color: var(--primary-red);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .archive-item-link:hover {
+            color: var(--dark-red);
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .news-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .archive-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .archive-item-title {
+                margin: 10px 0;
+            }
+        }
+        
+        /* Модальное окно для новости */
+        .news-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .news-modal-content {
+            background-color: white;
+            max-width: 800px;
+            margin: 50px auto;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .news-modal-header {
+            padding: 20px 30px;
+            background-color: var(--primary-red);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .news-modal-title {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
+        .close-news-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .news-modal-body {
+            padding: 30px;
+        }
+        
+        .news-modal-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+        }
+        
+        .news-modal-date {
+            color: var(--primary-red);
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .news-modal-text {
+            color: var(--dark-gray);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .news-modal-text p {
+            margin-bottom: 20px;
+        }
+        
+        .news-modal-text ul,
+        .news-modal-text ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        
+        .news-modal-text li {
+            margin-bottom: 10px;
+        }
+        
+        /* Приветствие пользователя */
+        .welcome-user {
+            background-color: var(--pale-red);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 40px;
+            text-align: center;
+            border-left: 5px solid var(--primary-red);
+        }
+        
+        .welcome-user h2 {
+            color: var(--dark-red);
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Проверка авторизации -->
+    <script>
+        if (!localStorage.getItem('currentUser')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+    
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-main">
+                <div class="logo-section">
+                    <div class="logo-icon-wrapper">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1 class="logo-title">Цветничок у Оли</h1>
+                        <p class="logo-subtitle">Красивые цветы для вашего настроения</p>
+                    </div>
+                </div>
+                
+                <div class="header-contacts">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div class="contact-info">
+                            <span class="contact-number">+375 25 530-99-49</span>
+                            <span class="contact-number">+375 33 623-94-33</span>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span class="contact-address">г.п. Вороново, ул. Аэродромная, д. 25</span>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <div class="user-section">
+                        <span id="user-greeting"></span>
+                        <a href="#" id="logout" class="logout-btn">Выйти</a>
+                    </div>
+                    <a href="cart.html" class="cart-button" id="open-cart">
+                        <i class="fas fa-shopping-basket"></i>
+                        <span class="cart-badge" id="cart-count">0</span>
+                    </a>
+                </div>
+            </div>
+            
+            <nav class="main-nav">
+                <a href="home.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Главная</span>
+                </a>
+                <a href="catalog.html" class="nav-link">
+                    <i class="fas fa-th-large"></i>
+                    <span>Каталог</span>
+                </a>
+                <a href="news.html" class="nav-link active">
+                    <i class="fas fa-newspaper"></i>
+                    <span>Новости</span>
+                </a>
+                <a href="contacts.html" class="nav-link">
+                    <i class="fas fa-address-book"></i>
+                    <span>Контакты</span>
+                </a>
+                <a href="account.html" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>Мой аккаунт</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Приветствие пользователя -->
+    <div class="section">
+        <div class="welcome-user">
+            <h2 id="welcome-message">Новости цветочного мира</h2>
+            <p>Будьте в курсе последних событий, акций и полезных советов от Цветничка у Оли!</p>
+        </div>
+    </div>
+    
+    <!-- Герой-секция -->
+    <section class="news-hero">
+        <div class="news-hero-content">
+            <h1>Новости и события</h1>
+            <p>Узнавайте первыми о новинках, акциях и интересных событиях в мире цветов от Олечки!</p>
+        </div>
+    </section>
+    
+    <!-- Фильтры новостей -->
+    <section class="news-section">
+        <h2 class="news-title">Последние новости</h2>
+        
+        <div class="news-filters">
+            <button class="filter-btn active" data-filter="all">Все новости</button>
+            <button class="filter-btn" data-filter="new">Новинки</button>
+            <button class="filter-btn" data-filter="sale">Акции</button>
+            <button class="filter-btn" data-filter="event">События</button>
+            <button class="filter-btn" data-filter="tips">Советы</button>
+        </div>
+        
+        <!-- Сетка новостей -->
+        <div class="news-grid" id="news-grid">
+            <!-- Новости будут добавлены через JavaScript -->
+        </div>
+        
+    
+        <!-- Архив новостей -->
+        <div class="news-archive">
+            <h2 class="archive-title">Архив новостей</h2>
+            <div class="archive-list" id="archive-list">
+                <!-- Архив будет добавлен через JavaScript -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Цветничок у Олечки</h3>
+                <p>Магазин цветов с душой. Мы создаем красивые букеты, которые дарят радость и выражают ваши чувства.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-vk"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Магазин</h3>
+                <ul class="footer-links">
+                    <li><a href="catalog.html">Каталог букетов</a></li>
+                    <li><a href="news.html">Новости и акции</a></li>
+                    <li><a href="#promotions">Спецпредложения</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Помощь</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Доставка и оплата</a></li>
+                    <li><a href="#">Уход за цветами</a></li>
+                    <li><a href="#">Частые вопросы</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Контакты</h3>
+                <p><i class="fas fa-map-marker-alt"></i> г.п. Вороново, ул. Аэродромная, д. 25</p>
+                <p><i class="fas fa-phone"></i> +375 25 530-99-49 / +375 (33) 623-94-33</p>
+                <p><i class="fas fa-envelope"></i> olgabalts@gmail.com / ilyabalt345ilya1@gmail.com</p>
+                <p><i class="fas fa-clock"></i> Ежедневно с 10:00 до 20:00</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 Магазин цветов "Цветничок у Олечки". Все права защищены.</p>
+        </div>
+    </footer>
+
+    <!-- Модальное окно для новости -->
+    <div class="news-modal" id="news-modal">
+        <div class="news-modal-content">
+            <div class="news-modal-header">
+                <h3 class="news-modal-title" id="modal-news-title"></h3>
+                <button class="close-news-modal" id="close-news-modal">&times;</button>
+            </div>
+            <div class="news-modal-body" id="modal-news-body">
+                <!-- Контент будет добавлен через JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Уведомление -->
+    <div class="notification" id="notification">
+        Товар добавлен в корзину!
+    </div>
+
+    <script>
+    // Проверка авторизации
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser) {
+        window.location.href = 'index.html';
+    }
+    
+    // Новости магазина
+    const newsData = [
+        {
+            id: 1,
+            title: "Новые весенние цветы уже в продаже!",
+            excerpt: "Встречайте весну с нашими новыми поступлениями: тюльпаны, нарциссы и гиацинты.",
+            content: "<p>Дорогие друзья! Спешим сообщить, что в нашем магазине появились первые весенние цветы. Мы привезли свежие тюльпаны разных сортов и расцветок, нежные нарциссы и ароматные гиацинты.</p><p>Каждый букет составлен с любовью и вниманием к деталям. Весенние цветы — это не только красиво, но и прекрасный способ поднять настроение после долгой зимы.</p><p>Приходите в наш магазин или заказывайте доставку — порадуйте себя и своих близких свежими весенними цветами!</p>",
+            image: "https://images.unsplash.com/photo-1495231916356-a86217efff12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            date: "15.03.2026",
+            category: "new",
+            badge: "НОВОЕ"
+        },
+        {
+            id: 2,
+            title: "Скидка 15% на все букеты к 8 марта",
+            excerpt: "Специальное предложение к Международному женскому дню. Действует до 10 марта.",
+            content: "<p>В преддверии Международного женского дня мы подготовили специальную акцию для наших клиентов!</p><p>С 1 по 10 марта действует скидка 15% на все букеты в нашем магазине. Это прекрасная возможность порадовать мам, жен, подруг и коллег красивыми цветами по выгодной цене.</p><p>Акция распространяется как на готовые букеты, так и на индивидуальные заказы. Успейте сделать заказ заранее, чтобы получить скидку и гарантировать доставку к празднику.</p>",
+            image: "https://images.unsplash.com/photo-1557170339-0b0a576d1c8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            date: "28.02.2026",
+            category: "sale",
+            badge: "АКЦИЯ"
+        },
+        {
+            id: 3,
+            title: "Мастер-класс по флористике от Олечки",
+            excerpt: "Приглашаем на бесплатный мастер-класс по созданию весенних композиций.",
+            content: "<p>Дорогие друзья! Олечка приглашает всех желающих на бесплатный мастер-класс по флористике, который состоится 25 марта в нашем магазине.</p><p>На мастер-классе вы научитесь:</p><ul><li>Выбирать и сочетать цветы</li><li>Создавать гармоничные композиции</li><li>Правильно ухаживать за срезанными цветами</li><li>Делать красивые упаковки для букетов</li></ul><p>Количество мест ограничено, поэтому записывайтесь заранее по телефону +375 25 530-99-49.</p>",
+            image: "https://images.unsplash.com/photo-1464207687429-7505649dae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            date: "10.03.2026",
+            category: "event",
+            badge: "СОБЫТИЕ"
+        },
+        {
+            id: 4,
+            title: "Как продлить жизнь срезанным цветам",
+            excerpt: "Полезные советы от Олечки по уходу за цветами, чтобы они дольше радовали своей красотой.",
+            content: "<p>Многие задаются вопросом: как сделать так, чтобы срезанные цветы стояли как можно дольше? Олечка делится своими секретами:</p><ol><li><strong>Правильная подготовка</strong> — подрезайте стебли под углом 45 градусов перед тем, как поставить цветы в воду.</li><li><strong>Чистая вода</strong> — меняйте воду ежедневно и промывайте вазу.</li><li><strong>Удаление листьев</strong> — убирайте все листья, которые будут находиться под водой.</li><li><strong>Температурный режим</strong> — избегайте сквозняков и прямых солнечных лучей.</li><li><strong>Питание</strong> — используйте специальные добавки для цветов или добавляйте в воду немного сахара и лимонной кислоты.</li></ol><p>Следуя этим простым советам, ваши цветы будут радовать вас значительно дольше!</p>",
+            image: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            date: "05.03.2026",
+            category: "tips",
+            badge: "СОВЕТ"
+        },
+        {
+            id: 5,
+            title: "Новая коллекция комнатных растений",
+            excerpt: "В нашем магазине появилась новая коллекция комнатных растений для вашего дома.",
+            content: "<p>Мы расширили ассортимент комнатных растений! Теперь в нашем магазине вы найдете не только срезанные цветы, но и разнообразные комнатные растения.</p><p>В новой коллекции представлены:</p><ul><li>Декоративно-лиственные растения (фикусы, монстеры, замиокулькасы)</li><li>Цветущие растения (орхидеи, спатифиллумы, антуриумы)</li><li>Суккуленты и кактусы</li><li>Травы для кухни (базилик, мята, розмарин)</li></ul><p>Все растения здоровые и ухоженные, привезены из проверенных питомников. Приходите выбирать зеленых друзей для вашего дома!</p>",
+            image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            date: "20.02.2026",
+            category: "new",
+            badge: "НОВИНКА"
+        },
+        {
+            id: 6,
+            title: "День всех влюбленных: специальные предложения",
+            excerpt: "Романтические букеты и скидки для пар к 14 февраля.",
+            content: "<p>День Святого Валентина — прекрасный повод выразить свои чувства с помощью цветов. Мы подготовили специальные предложения к этому романтическому празднику:</p><p><strong>1. Готовые романтические букеты</strong> — классические красные розы, нежные пионы, экзотические орхидеи.</p><p><strong>2. Индивидуальные заказы</strong> — создадим букет по вашим пожеланиям и предпочтениям вашей второй половинки.</p><p><strong>3. Скидка 10%</strong> на все заказы, сделанные до 10 февраля.</p><p><strong>4. Бесплатная открытка</strong> с признанием в любви к каждому букету.</p><p>Заказывайте заранее, чтобы мы могли подготовить для вас самый красивый букет!</p>",
+            image: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            date: "01.02.2026",
+            category: "sale",
+            badge: "АКЦИЯ"
+        }
+    ];
+    
+    // Архив новостей (старые новости)
+    const archiveData = [
+        { id: 7, title: "Открытие нового филиала магазина", date: "15.01.2026" },
+        { id: 8, title: "Новогодняя распродажа горшечных растений", date: "20.12.2025" },
+        { id: 9, title: "Встреча с поставщиками из Голландии", date: "05.12.2025" },
+        { id: 10, title: "Осенняя коллекция хризантем", date: "10.10.2025" },
+        { id: 11, title: "Летняя акция: скидки на свадебные букеты", date: "01.06.2025" },
+        { id: 12, title: "Выставка цветов в Минске", date: "15.05.2025" }
+    ];
+    
+    // Корзина
+    let cart = JSON.parse(localStorage.getItem('flowerCart')) || [];
+    
+    // Когда страница загрузилась
+    document.addEventListener('DOMContentLoaded', function() {
+        // Показываем имя пользователя
+        if (currentUser) {
+            const greetingElement = document.getElementById('user-greeting');
+            const welcomeElement = document.getElementById('welcome-message');
+            
+            if (greetingElement) {
+                greetingElement.textContent = `Привет, ${currentUser.name}!`;
+            }
+            if (welcomeElement) {
+                welcomeElement.textContent = `Новости цветочного мира, ${currentUser.name}!`;
+            }
+        }
+        
+        // Показываем новости
+        showNews('all');
+        
+        // Показываем архив
+        showArchive();
+        
+        // Обновляем корзину
+        updateCartCount();
+        
+        // Настраиваем кнопки
+        setupButtons();
+        
+        // Настраиваем фильтры
+        setupFilters();
+        
+        // Настраиваем подписку
+        setupSubscription();
+    });
+    
+    // Показать новости
+    function showNews(filter = 'all') {
+        const container = document.getElementById('news-grid');
+        if (!container) return;
+        
+        // Фильтруем новости
+        let filteredNews = newsData;
+        if (filter !== 'all') {
+            filteredNews = newsData.filter(news => news.category === filter);
+        }
+        
+        // Сортируем по дате (сначала новые)
+        filteredNews.sort((a, b) => {
+            const dateA = parseDate(a.date);
+            const dateB = parseDate(b.date);
+            return dateB - dateA;
+        });
+        
+        let html = '';
+        
+        filteredNews.forEach(news => {
+            html += `
+            <div class="news-card" data-category="${news.category}">
+                <div class="news-badge ${news.category}">${news.badge}</div>
+                <div class="news-image">
+                    <img src="${news.image}" alt="${news.title}" onerror="this.src='https://via.placeholder.com/400x300?text=Новость'">
+                </div>
+                <div class="news-content">
+                    <div class="news-date">
+                        <i class="far fa-calendar-alt"></i>
+                        ${news.date}
+                    </div>
+                    <h3 class="news-card-title">${news.title}</h3>
+                    <p class="news-excerpt">${news.excerpt}</p>
+                    <a href="#" class="news-read-more" onclick="openNewsModal(${news.id}); return false;">
+                        Читать далее
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+    
+    // Показать архив
+    function showArchive() {
+        const container = document.getElementById('archive-list');
+        if (!container) return;
+        
+        let html = '';
+        
+        archiveData.forEach(item => {
+            html += `
+            <div class="archive-item">
+                <div class="archive-item-date">${item.date}</div>
+                <div class="archive-item-title">${item.title}</div>
+                <a href="#" class="archive-item-link" onclick="openArchiveNews(${item.id}); return false;">
+                    Открыть
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    }
+    
+    // Открыть модальное окно с новостью
+    window.openNewsModal = function(newsId) {
+        const news = newsData.find(n => n.id === newsId);
+        if (!news) return;
+        
+        const modal = document.getElementById('news-modal');
+        const title = document.getElementById('modal-news-title');
+        const body = document.getElementById('modal-news-body');
+        
+        if (!modal || !title || !body) return;
+        
+        title.textContent = news.title;
+        
+        body.innerHTML = `
+            <div class="news-modal-date">
+                <i class="far fa-calendar-alt"></i>
+                ${news.date}
+            </div>
+            <img src="${news.image}" alt="${news.title}" class="news-modal-image" onerror="this.src='https://via.placeholder.com/800x400?text=Новость'">
+            <div class="news-modal-text">
+                ${news.content}
+            </div>
+        `;
+        
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    };
+    
+    // Открыть архивную новость
+    window.openArchiveNews = function(newsId) {
+        alert(`Новость #${newsId} из архива. Детали будут добавлены позже.`);
+    };
+    
+    // Парсинг даты из строки
+    function parseDate(dateString) {
+        const parts = dateString.split('.');
+        return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+    
+    // Настроить фильтры
+    function setupFilters() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Убрать активный класс у всех кнопок
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Добавить активный класс текущей кнопке
+                this.classList.add('active');
+                
+                // Показать отфильтрованные новости
+                const filter = this.getAttribute('data-filter');
+                showNews(filter);
+            });
+        });
+    }
+    
+    // Настроить подписку
+    function setupSubscription() {
+        const form = document.getElementById('news-subscribe-form');
+        if (!form) return;
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const emailInput = this.querySelector('input[type="email"]');
+            const email = emailInput.value.trim();
+            
+            if (!email) {
+                showMessage('Пожалуйста, введите email');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showMessage('Пожалуйста, введите корректный email');
+                return;
+            }
+            
+            // Сохранить подписку
+            const subscriptions = JSON.parse(localStorage.getItem('newsSubscriptions')) || [];
+            if (!subscriptions.includes(email)) {
+                subscriptions.push(email);
+                localStorage.setItem('newsSubscriptions', JSON.stringify(subscriptions));
+            }
+            
+            // Показать сообщение
+            showMessage('Вы успешно подписались на новости!');
+            
+            // Очистить поле
+            emailInput.value = '';
+        });
+    }
+    
+    // Валидация email
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+    
+    // Обновить счетчик корзины
+    function updateCartCount() {
+        const countElement = document.getElementById('cart-count');
+        if (!countElement) return;
+        
+        const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+        countElement.textContent = total;
+    }
+    
+    // Показать сообщение
+    function showMessage(text) {
+        // Создать или найти уведомление
+        let notification = document.getElementById('notification');
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.id = 'notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--primary-red);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 5px;
+                z-index: 1000;
+                display: none;
+            `;
+            document.body.appendChild(notification);
+        }
+        
+        notification.textContent = text;
+        notification.style.display = 'block';
+        
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+    
+    // Настроить кнопки
+    function setupButtons() {
+        // Выход
+        const logoutBtn = document.getElementById('logout');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            });
+        }
+        
+        // Закрытие модального окна новости
+        const closeModalBtn = document.getElementById('close-news-modal');
+        const modal = document.getElementById('news-modal');
+        
+        if (closeModalBtn && modal) {
+            closeModalBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Закрытие при клике вне окна
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+    }
+    </script>
+</body>
+</html>
